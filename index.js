@@ -3,6 +3,14 @@ const loader = document.querySelector('#loader');
 const dataContainer = document.querySelector('#data-container');
 let isUsersList = false;
 
+const toogleLoader = ()=>{
+  const isHidden = loader.hasAttribute('hidden');
+  if(isHidden){
+    loader.removeAttribute('hidden');
+  }else{
+    loader.setAttribute('hidden', '');
+  }
+}
 const createUserElement = (text)=>{
   const userElement = document.createElement('li');
   const userElementAnchor = document.createElement('a');
@@ -12,6 +20,8 @@ const createUserElement = (text)=>{
   return userElement;
 }
 const getAllUsers = ()=>{
+  toogleLoader();
+    
   const result = fetch(USERS_URL, {
     method: 'GET',
   });
@@ -32,20 +42,18 @@ const getAllUsers = ()=>{
   .catch((error)=>{ 
     console.log(error);
   })
+  .finally(()=>{
+    toogleLoader();
+  }    
+  )
 }
  
 document.addEventListener('click', ()=>{
 
   if(!isUsersList){
-    console.log('click');
     
-    if (loader.hasAttribute('hidden')) {
-      loader.removeAttribute('hidden');
-    }
     setTimeout(getAllUsers(),10000);    
-    isUsersList = true;
-    //setTimeout( loader.setAttribute('hidden'), 3000);
-    
+    isUsersList = true;    
   }else{
     console.log('!');
     
